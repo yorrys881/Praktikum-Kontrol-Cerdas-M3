@@ -1,0 +1,23 @@
+import pickle
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import numpy as np
+
+data_dict = pickle.load(open('D:\Yorrys\Kontrol Cerdas\Minggu 3\DATA SIBI\data.pickle', 'rb'))
+
+data = np.array(data_dict['data'])
+labels = np.array(data_dict['labels'])
+
+x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size = 0.1, shuffle = True, stratify = labels)
+
+model = RandomForestClassifier()
+model.fit(x_train, y_train)
+
+y_pred = model.predict(x_test)
+score = accuracy_score(y_pred, y_test)
+print('{}% of samples were classified correctly !'.format(score*100))
+
+f = open('D:\Yorrys\Kontrol Cerdas\Minggu 3\DATA SIBI\model.p', 'wb')
+pickle.dump({'model' : model}, f)
+f.close()
